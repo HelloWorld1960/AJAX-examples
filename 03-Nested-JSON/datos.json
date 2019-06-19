@@ -1,0 +1,37 @@
+{
+	"Jorge":{
+		"nombre":"Jorge",
+		"apellidos":"V_CH",
+		"edad":25,
+		"salario":200
+	},
+
+	"Diana":{
+		"nombre":"Diana",
+		"apellidos":"V_CH",
+		"edad":18,
+		"salario":300
+	},
+
+	"Elizabeth":{
+		"nombre":"Elizabeth",
+		"apellidos":"V_CH",
+		"edad":39,
+		"salario":200
+	},
+
+	"Raquel":{
+		"nombre":"Raquel",
+		"apellidos":"V_CH",
+		"edad":25,
+		"salario":200
+	},
+
+	"Jessica":{
+		"nombre":"Jessica",
+		"apellidos":"V_CH",
+		"edad":90,
+		"salario":200
+	}
+
+}
