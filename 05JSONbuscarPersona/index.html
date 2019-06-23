@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<!-- Nested JSON es la agrupacion de varios objetos JSON, dentro de un objeto JSON -->
+	<!-- AJAX-Asynchronous JavaScript And XML(JavaScript Asíncrono y XML).
+	-Actualiza una pagina web sin necesidad de recargar la pantalla.
+	-Sirve para recibir o enviar informacion hacia un servidor.
+	-La posibilidad de analizar y trabajar con documentos XML. -->
+	<!-- onkeyup() ejecuta cada vez que el usuario deje de precionar una tecla.
+	this.value es el texto escrito en el input -->
+	<label>Buscar Persona: </label>
+	<input type="text" onkeyup="ajax_get_json(this.value)" />
+	<div id="info"></div>
+
+	<script type="text/javascript">
+		/*usuarioIngresado es el parametro que se le pasa con this.value*/
+		function ajax_get_json(usuarioIngresado) {
+			var resultado = document.getElementById("info");
+			var xmlhttp;
+
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			/*Si la cantidad de caracteres en usuarioIngresado.length es igual a cero no muestres nada*/
+			if (usuarioIngresado.length === 0) {
+				resultado.innerHTML = "";
+			} else {
+				//valor de ajaxRequest.readyState
+				// 0 Peticion no ha sido inicializada
+				// 1 Peticion ha sido establecida
+				// 2 Peticion ha sido enviada
+				// 3 Peticion esta siendo procesada
+				// 4 Peticion ha sido finalizada
+				// ajaxRequest.status ==200 ha sido exitosa
+				/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+				 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+				xmlhttp.onreadystatechange = function() {
+					/*Si la peticion ha sido finalizada y exitosa*/
+					if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+						/*xmlhttp.responseText retorna los datos de respuesta como un String.*/
+						/*JSON.parse() convierte la cadena de texto a un objeto de JSON.*/
+						//alert(xmlhttp.responseText)
+						var datos = JSON.parse(xmlhttp.responseText); /*Objeto JSON*/
+						/*x almacenara true en caso de que el usuario se encuentre dentro del objeto JSON*/
+						var x = encontrarPersona(datos, usuarioIngresado);
+						/*condición ? expr1 : expr2 */
+						var mensaje = (x === true) ? "<span class='encontrado'>Si fue encontrado</span>" : "<span class='no-encontrado'>No encontrado</span>";
+						resultado.innerHTML = mensaje; /* innerHTML sirve para "escribir" dentro de un elemento HTML*/
+					} //fin if xmlhttp.readyState
+				}
+
+				/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+				xmlhttp.open("GET", "datos.json", true);
+				xmlhttp.send(); //para poder enviar la peticion
+			}
+		}
+
+
+		function encontrarPersona(objetoJSON, usuario) {
+			var arreglo = [];
+			for (var i in objetoJSON) {
+				var persona = objetoJSON[i];
+				arreglo.push(persona.nombre);
+			}
+			/*indexOf() devuelve la posicion de la primera aparicion de un valor especificado en una cadena.
+			 *En un arreglo el elemento que no se encuantra en el arreglo, toma el indice -1.
+			 *Si el elmento hayado es mayor a -1, entonces SI esta en el arreglo y regresa un true.*/
+			return (arreglo.indexOf(usuario) > -1);
+		}
+	</script>
+
+</body>
+
+</html>

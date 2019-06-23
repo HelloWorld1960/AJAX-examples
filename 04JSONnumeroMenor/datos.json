@@ -1,0 +1,36 @@
+[{
+    "nombre": "Jorge",
+    "apellidos": "V_CH",
+    "edad": 100
+  },
+  {
+    "nombre": "Diana",
+    "apellidos": "V_CH",
+    "edad": 18
+  },
+  {
+    "nombre": "Elizabeth",
+    "apellidos": "V_CH",
+    "edad": 39
+  },
+  {
+    "nombre": "Raquel",
+    "apellidos": "V_CH",
+    "edad": 25
+  },
+  {
+    "nombre": "Jessica",
+    "apellidos": "V_CH",
+    "edad": 90
+  },
+  {
+    "nombre": "Ivan",
+    "apellidos": "V_CH",
+    "edad": 73
+  },
+  {
+    "nombre": "Rufino",
+    "apellidos": "V_CH",
+    "edad": 10
+  }
+]

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Proyecto</title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body onload="mostrarClientes()">
+<!-- AJAX-Asynchronous JavaScript And XML(JavaScript Asíncrono y XML).
+-Actualiza una pagina web sin necesidad de recargar la pantalla.
+-Sirve para recibir o enviar informacion hacia un servidor.
+-La posibilidad de analizar y trabajar con documentos XML. -->
+	<form>
+		Buscar Cliente:
+		<input type="text" id="texto" placeholder="Ingresar nombre" onkeyup="buscarUsuario(this.value)" /><br /><br />
+	</form>
+
+	<div id="wrapper">
+		<div id="mostrar"></div>
+	</div>
+
+	<div id="overlay"> <!-- parte opaca de la ventana. --> </div>
+
+	<div id="informacionDelUsuario">
+		<div id="titulo">Informacion Personal</div>
+		<p id="info"></p>
+		<button type="button" onclick="toggleOverlay(this)">Cerrar</button>
+	</div>
+
+	<!-- Scripts -->
+	<script type="text/javascript">
+		function mostrarClientes() {
+			var resultado = document.getElementById("mostrar");
+			var xmlhttp;
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			//valor de ajaxRequest.readyState
+			// 0 Peticion no ha sido inicializada
+			// 1 Peticion ha sido establecida
+			// 2 Peticion ha sido enviada
+			// 3 Peticion esta siendo procesada
+			// 4 Peticion ha sido finalizada
+			// xmlhttp.status ==200 ha sido exitosa
+			/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+			 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+			xmlhttp.onreadystatechange = function() {
+				/*Si la peticion ha sido finalizada y exitosa*/
+				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					/*xmlhttp.responseText retorna los datos de respuesta como un String.*/
+					var mensaje = xmlhttp.responseText;
+					resultado.innerHTML = mensaje;
+				}
+			}
+
+			/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+			xmlhttp.open("GET", "servidor.php", true);
+			xmlhttp.send();
+		}
+
+
+		function buscarUsuario(nombre) {
+			var xmlhttp;
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			//valor de ajaxRequest.readyState
+			// 0 Peticion no ha sido inicializada
+			// 1 Peticion ha sido establecida
+			// 2 Peticion ha sido enviada
+			// 3 Peticion esta siendo procesada
+			// 4 Peticion ha sido finalizada
+			// ajaxRequest.status ==200 ha sido exitosa
+			/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+			 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+			xmlhttp.onreadystatechange = function() {
+				/*Si la peticion ha sido finalizada y exitosa*/
+				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					/*xmlhttp.responseText retorna los datos de respuesta como un String.*/
+					var mensaje = xmlhttp.responseText;
+					mostrar.innerHTML = mensaje;
+				}
+			}
+			/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+			xmlhttp.open("GET", "servidor.php?nombre=" + nombre, true);
+			xmlhttp.send();
+		}
+
+
+		function toggleOverlay(elemento){
+			var overlay = document.getElementById("overlay");
+			var informacionDelUsuario = document.getElementById("informacionDelUsuario");
+			var info = document.getElementById("info");
+
+			overlay.style.opacity = 0.6;
+
+			if (overlay.style.display == "block") {
+				overlay.style.display = "none";
+				informacionDelUsuario.style.display = "none";
+			}else {
+				overlay.style.display = "block";
+				informacionDelUsuario.style.display = "block";
+			}
+
+			var nombre = elemento.innerHTML;
+			//nextSibling.value obtiene el valor del siguiente nodo o elemento.
+			var correo = elemento.nextSibling.value;
+			info.innerHTML = "<strong>Nombre: </strong>" + nombre + "<br/>" + "<strong>Correo: </strong>" + correo + "<br/>";
+		}
+
+
+	</script>
+</body>
+
+</html>

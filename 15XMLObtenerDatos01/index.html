@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Leer datos de un archivo XML</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- AJAX-Asynchronous JavaScript And XML(JavaScript Asíncrono y XML).
+  	-Actualiza una pagina web sin necesidad de recargar la pantalla.
+  	-Sirve para recibir o enviar informacion hacia un servidor.
+  	-La posibilidad de analizar y trabajar con documentos XML. -->
+  <button type="button" name="button" onclick="ejecutarAJAX()">Mostrar informacion</button>
+  <div id="info"></div>
+
+  <!-- Scripts -->
+  <script type="text/javascript">
+    function ejecutarAJAX() {
+      var resultado = document.getElementById("info");
+      var arreglo = [];
+      var xmlhttp;
+      // Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+      if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+        // XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+        xmlhttp = new XMLHttpRequest();
+      } else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+        // Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+      //valor de ajaxRequest.readyState
+      // 0 Peticion no ha sido inicializada
+      // 1 Peticion ha sido establecida
+      // 2 Peticion ha sido enviada
+      // 3 Peticion esta siendo procesada
+      // 4 Peticion ha sido finalizada
+      // ajaxRequest.status ==200 ha sido exitosa
+
+      /* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+       * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+      xmlhttp.onreadystatechange = function() {
+        /*Si la peticion ha sido finalizada y exitosa entonces procesa la respuesta.*/
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          /*responseXML devuelve un documento que contiene el HTMl o XML recuperado por la solicitud.
+          *item(0) obtiene el primer elemento dentro de la etiqueta. */
+          if (xmlhttp.responseXML !== null) {
+            arreglo[0] = xmlhttp.responseXML.getElementsByTagName("nombre").item(0);
+            arreglo[1] = xmlhttp.responseXML.getElementsByTagName("apellido").item(0);
+            arreglo[2] = xmlhttp.responseXML.getElementsByTagName("edad").item(0);
+
+            resultado.innerHTML = arreglo[0].firstChild.nodeValue + " " + arreglo[1].firstChild.nodeValue + " tiene " + arreglo[2].firstChild.nodeValue + " años.";
+          }
+        }
+      }
+
+      /*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+       *open(method, url, async) especifica el tipo de peticion.
+       *true significa que la peticion sera asincrona (la pantalla no sera recargada)
+       *send() envia la peticion al servidor.*/
+      xmlhttp.open("GET", "datos.xml", true);
+      xmlhttp.send();
+    }
+  </script>
+</body>
+
+</html>

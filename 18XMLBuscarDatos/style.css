@@ -1,0 +1,20 @@
+table{
+  width: 30%;
+  border-collapse: collapse;
+  -webkit-box-shadow: 7px 7px 23px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 7px 7px 23px -4px rgba(0,0,0,0.75);
+  box-shadow: 7px 7px 23px -4px rgba(0,0,0,0.75);
+}
+
+table, td, th{
+  border: 1px solid #cccccc;
+  padding: 5px;
+}
+
+th{
+  text-align: left;
+}
+
+tr:nth-child(even){
+  background-color: #E8ECED;
+}

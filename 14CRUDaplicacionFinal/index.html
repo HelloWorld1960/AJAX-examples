@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Inventario</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap-3.3.7/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-3.3.7/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+	<!-- AJAX-Asynchronous JavaScript And XML(JavaScript Asíncrono y XML).
+	-Actualiza una pagina web sin necesidad de recargar la pantalla.
+	-Sirve para recibir o enviar informacion hacia un servidor.
+	-La posibilidad de analizar y trabajar con documentos XML. -->
+	<div id="overlay">
+		<!-- parte opaca de la ventana -->
+	</div>
+	<div id="nuevaVentana">
+		<div id="box-header">Agregar usuario</div>
+		<button onmousedown="ejecutarNuevaVentana()" id="botonCerrar"></button><br /><br /><br />
+		<label>Nombre: </label><input type="text" id="nuevoUsuarioID" name="" /><br /><br />
+		<label>Correo: </label><input type="email" id="nuevoEmailID" name="" /><br /><br /><br />
+		<button onmousedown="agregarUsuario()" style="margin-left: 34%;" class="btn btn-success">
+			Agregar usuario Nuevo
+		</button><br />
+	</div>
+
+	<div id="wrapper">
+		<div id="info"></div>
+	</div>
+
+	<!-- Scripts -->
+	<script type="text/javascript">
+
+		function mostrarUsuarios() {
+			var resultado = document.getElementById("info");
+			var xmlhttp;
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			//valor de ajaxRequest.readyState
+			// 0 Peticion no ha sido inicializada
+			// 1 Peticion ha sido establecida
+			// 2 Peticion ha sido enviada
+			// 3 Peticion esta siendo procesada
+			// 4 Peticion ha sido finalizada
+			// xmlhttp.status ==200 ha sido exitosa
+			/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+			 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+			xmlhttp.onreadystatechange = function() {
+				/*Si la peticion ha sido finalizada y exitosa*/
+				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					/*xmlhttp.responseText retorna los datos de respuesta como un String.*/
+					var mensaje = xmlhttp.responseText;
+					resultado.innerHTML = mensaje;
+				}
+			}
+
+			/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+			xmlhttp.open("GET", "servidor.php?personas=" + "personas", true);
+			xmlhttp.send();
+		} //end mostrarUsuarios()
+
+		//Ejecutamos la funcion
+		mostrarUsuarios();
+
+		function editarUsuario(usuarioID) {
+			var nombreID = "nombreID" + usuarioID;
+			var emailID = "emailID" + usuarioID;
+			var borrar = "borrar" + usuarioID;
+			var actualizar = "actualizar" + usuarioID;
+			var editarNombreID = nombreID + "-editar";
+
+			var nombreDelUsuario = document.getElementById(nombreID).innerHTML; //obtener nombre del usuario.
+			//.querySelector() devuelve el primer elemento del documento que coincida con el selector CSS especificado. La almohadilla hace referencia a un selector de tipo id.
+			var parent = document.querySelector("#" + nombreID);
+			/*Si el elmento hijo(input) NO esta dentro del elemento padre(th), entonces debe crear el input*/
+			if (parent.querySelector("#" + editarNombreID) === null) {
+				document.getElementById(nombreID).innerHTML = '<input type="text" id="' + editarNombreID + '" value ="' + nombreDelUsuario + '">';
+				document.getElementById(borrar).disabled = "true";
+				document.getElementById(actualizar).style.display = "block";
+			}
+		} //end editarUsuario()
+
+
+		function actualizarUsuario(usuarioID) {
+			var xmlhttp;
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			// obtener el nuevo nombre del input que va a ser actualizado.
+			var nombreActualizado = document.getElementById("nombreID" + usuarioID + "-editar").value;
+			//valor de ajaxRequest.readyState
+			// 0 Peticion no ha sido inicializada
+			// 1 Peticion ha sido establecida
+			// 2 Peticion ha sido enviada
+			// 3 Peticion esta siendo procesada
+			// 4 Peticion ha sido finalizada
+			// xmlhttp.status ==200 ha sido exitosa
+			/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+			 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+			xmlhttp.onreadystatechange = function() {
+				/*Si la peticion ha sido finalizada y exitosa*/
+				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					mostrarUsuarios();
+				}
+			}
+
+			/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+			xmlhttp.open("GET", "servidor.php?usuarioIDActualizado=" + usuarioID + "&nombreActualizado=" + nombreActualizado, true);
+			xmlhttp.send();
+
+		} //fin function
+
+
+		function borrarUsuario(usuarioID) {
+			//confirm() muestra un cuadro de confirmacion devolviendo true o false dependiendo de la respuesta.
+			var respuesta = confirm("¿estas seguro de borrar este usuario?");
+			if (respuesta === true) {
+				// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+				if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+					// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+					xmlhttp = new XMLHttpRequest();
+				} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+					// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+
+				//valor de ajaxRequest.readyState
+				// 0 Peticion no ha sido inicializada
+				// 1 Peticion ha sido establecida
+				// 2 Peticion ha sido enviada
+				// 3 Peticion esta siendo procesada
+				// 4 Peticion ha sido finalizada
+				// xmlhttp.status ==200 ha sido exitosa
+				/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+				 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+				xmlhttp.onreadystatechange = function() {
+					/*Si la peticion ha sido finalizada y exitosa*/
+					if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+						mostrarUsuarios();
+					}
+				}
+
+				/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+				 *open(method, url, async) especifica el tipo de peticion.
+				 *send() envia la peticion al servidor.
+				 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+				xmlhttp.open("GET", "servidor.php?usuarioIDEliminado=" + usuarioID);
+				xmlhttp.send();
+			}
+		} //fin borrarUsuario
+
+		var overlay = document.getElementById("overlay"); //parte opaca.
+		var nuevaVentana = document.getElementById("nuevaVentana"); //ventana.
+
+		function ejecutarNuevaVentana() {
+			overlay.style.opacity = .5;
+
+			if (overlay.style.display == "block") { //Si la parte opaca se muestra en la pantalla
+				overlay.style.display = "none";
+				nuevaVentana.style.display = "none";
+			} else { //Si no se muestran.
+				overlay.style.display = "block";
+				nuevaVentana.style.display = "block";
+			}
+
+			/*Asegurarnos que los inputs esten vacios*/
+			document.getElementById("nuevoUsuarioID").value = "";
+			document.getElementById("nuevoEmailID").value = "";
+		} //fin ejecutarNuevaVentana
+
+
+
+		function agregarUsuario() {
+			overlay.style.display = "none"; /*ocultamos el overlay*/
+			nuevaVentana.style.display = "none"; /*ocultamos la ventana*/
+
+			// Identificar el tipo de navegador web para crear el objeto XMLHttpRequest en caso de navegadores modernos.
+			if (window.XMLHttpRequest) { // Chrome, Firefox, Internet Explorer 7 +, Edge, Safari, Opera.
+				// XMLHttpRequest se utiliza para intercambiar datos con un servidor en segundo plano.
+				xmlhttp = new XMLHttpRequest();
+			} else { //En caso de que sea un navegador antiguo usar el objeto ActiveXObject.
+				// Las versiones antiguas de Internet Explorer (IE5 e IE6) utilizan un objeto ActiveX en lugar del objeto XMLHttpRequest.
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			var nuevoUsuario = document.getElementById("nuevoUsuarioID").value;
+			var nuevoEmail = document.getElementById("nuevoEmailID").value;
+
+			//valor de ajaxRequest.readyState
+			// 0 Peticion no ha sido inicializada
+			// 1 Peticion ha sido establecida
+			// 2 Peticion ha sido enviada
+			// 3 Peticion esta siendo procesada
+			// 4 Peticion ha sido finalizada
+			// xmlhttp.status ==200 ha sido exitosa
+			/* Especificar que pasara despues de recibir la respuesta del servidor a la peticion enviada.
+			 * onreadystatechange se va encargar de procesar la respuesta enviada por el servidor*/
+			xmlhttp.onreadystatechange = function() {
+				/*Si la peticion ha sido finalizada y exitosa*/
+				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					mostrarUsuarios();
+				}
+			}
+
+			/*Después de especificar qué pasará al recibir la respuesta es necesario hacer la petición.
+			 *open(method, url, async) especifica el tipo de peticion.
+			 *send() envia la peticion al servidor.
+			 *true significa que la peticion sera asincrona (la pantalla no sera recargada)*/
+			xmlhttp.open("GET", "servidor.php?nuevoUsuario=" + nuevoUsuario + "&nuevoEmail=" + nuevoEmail, true);
+			xmlhttp.send();
+		}
+	</script>
+</body>
+
+</html>

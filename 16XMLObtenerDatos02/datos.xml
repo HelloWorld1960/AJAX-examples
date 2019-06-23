@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clientes>
+  <cliente>
+    <nombre>Iván</nombre>
+    <apellido>Vill</apellido>
+    <edad>20</edad>
+    <salario>3000</salario>
+  </cliente>
+  <cliente>
+    <nombre>Rufino</nombre>
+    <apellido>Flores</apellido>
+    <edad>20</edad>
+    <salario>3000</salario>
+  </cliente>
+  <cliente>
+    <nombre>Rebeca</nombre>
+    <apellido>González</apellido>
+    <edad>20</edad>
+    <salario>3000</salario>
+  </cliente>
+  <cliente>
+    <nombre>Victoria</nombre>
+    <apellido>González</apellido>
+    <edad>20</edad>
+    <salario>3000</salario>
+  </cliente>
+  <cliente>
+    <nombre>Daniel</nombre>
+    <apellido>Chavez</apellido>
+    <edad>20</edad>
+    <salario>3000</salario>
+  </cliente>
+</clientes>
